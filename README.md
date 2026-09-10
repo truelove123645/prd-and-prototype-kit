@@ -23,7 +23,9 @@ description: "产品经理向：把需求沉淀为高保真原型图（PNG）与
 
 ---
 
-## 二、环境准备（Windows，一次性）
+## 二、环境准备（Windows / macOS，一次性）
+
+**Windows**
 
 ```powershell
 # npm 走国内镜像，规避证书问题
@@ -36,7 +38,21 @@ npm install puppeteer-core docx --registry=https://registry.npmmirror.com
 pip install openpyxl
 ```
 
+**macOS**
+
+```bash
+# npm 走国内镜像，规避证书问题
+npm config set registry https://registry.npmmirror.com
+# 原型需要 puppeteer-core + 系统 Chrome（勿装完整 puppeteer，太重）
+npm install puppeteer-core docx --registry=https://registry.npmmirror.com
+# 系统 Chrome 路径（macOS 默认，按实际安装位置调整）
+# export CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# Excel（pip3 报错时改 python3 -m pip install openpyxl）
+pip3 install openpyxl
+```
+
 **避坑清单（本套件实战总结）**
+- **macOS 差异**：Chrome 路径用 `export CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"`；pip 用 `pip3` / `python3 -m pip`；macOS 上 `launch` 不需要 `--no-sandbox`（留着也无碍）。
 - **numpy 破坏 openpyxl**：若报 `numpy has no attribute 'short'/__version__`，说明环境里有残缺 numpy。**最省事**：脚本顶部加 `import sys; sys.modules["numpy"] = None`，让 openpyxl 走无 numpy 分支即可。
 - **npm SSL 证书错误**：加 `--strict-ssl=false`（Windows 企业网代理场景偶发，正常环境不需要）。
 - **Chrome 退出时 Crashpad/Sandbox 报错**：无害，输出正常时忽略即可（可 `grep -v -i "crashpad\|sandbox\|settings.dat"` 过滤）。
